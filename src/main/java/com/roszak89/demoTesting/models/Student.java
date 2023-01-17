@@ -27,9 +27,9 @@ public class Student {
     private String email;
 
     @ManyToMany
-    @JoinTable(name="students_classes",
-            joinColumns={@JoinColumn(name="student_id")}, inverseJoinColumns={@JoinColumn(name="class_id")} )
-    private Set<Class> classes;
+    @JoinTable(name="students_lessons",
+            joinColumns={@JoinColumn(name="student_id")}, inverseJoinColumns={@JoinColumn(name="lesson_id")} )
+    private Set<Lesson> lessons;
 
 
 }

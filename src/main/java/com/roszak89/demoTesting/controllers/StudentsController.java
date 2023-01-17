@@ -13,11 +13,11 @@ import java.util.List;
 
 
 @RestController
-public class HomeController {
+public class StudentsController {
 
     private final StudentRepository studentRepository;
 
-    public HomeController(StudentRepository studentRepository) {
+    public StudentsController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
@@ -43,14 +43,14 @@ public class HomeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/update_student/{id}")
     public void updateStudent(@Valid @RequestBody Student student, @PathVariable long id) {
-        student.setId(studentRepository.findAll().stream().filter(s -> s.getId().equals(id)).findFirst().orElseThrow(()-> new IllegalArgumentException("Student not found!")).getId());
+        student.setId(studentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Student not found!")).getId());
         studentRepository.save(student);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/delete_student/{id}")
     public void deleteStudent(@PathVariable long id) {
-        studentRepository.delete(studentRepository.findAll().stream().filter(student -> student.getId().equals(id)).findFirst().orElseThrow(()-> new IllegalArgumentException("Student not found!")));
+        studentRepository.delete(studentRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Student not found!")));
     }
 
 }

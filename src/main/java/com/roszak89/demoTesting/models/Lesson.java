@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 
-public class Class {
+public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Class {
     @JoinColumn(name = "teacher_id")
     private Teacher mainTeacher;
 
-    @ManyToMany(mappedBy = "classes")
+    @ManyToMany(mappedBy = "lessons")
     private Set<Student> students;
 
 
