@@ -21,26 +21,6 @@ public class Lesson {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
-    private Teacher mainTeacher;
-
-    @ManyToMany( mappedBy = "lessons")
-    private Set<Student> students;
-
-
-    public Lesson removeFromStudents(){
-        students.forEach(s->s.getLessons().remove(this));
-        students.clear();
-        return this;
-    }
-
-    public Lesson removeTeacher(){
-        mainTeacher.getLessons().remove(this);
-        this.setMainTeacher(null);
-        return this;
-    }
-
 
 
 

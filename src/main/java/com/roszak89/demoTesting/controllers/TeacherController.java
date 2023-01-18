@@ -3,7 +3,7 @@ package com.roszak89.demoTesting.controllers;
 import com.roszak89.demoTesting.exceptions.NotFoundException;
 import com.roszak89.demoTesting.models.Teacher;
 import com.roszak89.demoTesting.repositories.TeacherRepository;
-import com.roszak89.demoTesting.services.TeacherService;
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,11 +14,10 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherRepository teacherRepository;
-    private final TeacherService teacherService;
 
-    public TeacherController(TeacherRepository teacherRepository, TeacherService teacherService) {
+
+    public TeacherController(TeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
-        this.teacherService = teacherService;
     }
 
     @GetMapping("/teachers")
@@ -47,6 +46,6 @@ public class TeacherController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/teacher/{id}")
     public void deleteTeacher(@PathVariable long id){
-        teacherRepository.delete(teacherService.deleteTeacher(id));
+        teacherRepository.delete(teacherRepository.findById(id).orElseThrow(()->new NotFoundException("Teacher not found!", id)));
     }
 }

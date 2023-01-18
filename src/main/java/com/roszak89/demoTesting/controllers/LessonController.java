@@ -1,8 +1,9 @@
 package com.roszak89.demoTesting.controllers;
 
+import com.roszak89.demoTesting.exceptions.NotFoundException;
 import com.roszak89.demoTesting.models.Lesson;
 import com.roszak89.demoTesting.repositories.LessonRepository;
-import com.roszak89.demoTesting.services.LessonService;
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,10 @@ import java.util.List;
 public class LessonController {
 
     private final LessonRepository lessonRepository;
-    private final LessonService lessonService;
 
-    public LessonController(LessonRepository lessonRepository, LessonService lessonService) {
+
+    public LessonController(LessonRepository lessonRepository) {
         this.lessonRepository = lessonRepository;
-        this.lessonService = lessonService;
     }
 
     @GetMapping("/lessons")
@@ -47,6 +47,6 @@ public class LessonController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/lesson/{id}")
     public void deleteLesson(@PathVariable long id){
-        lessonRepository.delete(lessonService.deleteLesson(id));
+        lessonRepository.delete(lessonRepository.findById(id).orElseThrow(()->new NotFoundException("Lesson not found!", id)));
     }
 }

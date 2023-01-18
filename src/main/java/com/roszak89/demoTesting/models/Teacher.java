@@ -20,14 +20,7 @@ public class Teacher {
     private Long id;
     private long pay;
     private String name;
-    @OneToMany
-    private Set<Lesson> lessons;
 
-    public Teacher removeFromLessons(){
-        this.getLessons().forEach(l->l.setMainTeacher(null));
-        this.getLessons().clear();
-        return this;
-    }
 
 
 

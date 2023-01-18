@@ -26,14 +26,5 @@ public class Student {
     @NotBlank
     private String email;
 
-    @ManyToMany
-    @JoinTable(name="students_lessons",
-            joinColumns={@JoinColumn(name="student_id")}, inverseJoinColumns={@JoinColumn(name="lesson_id")} )
-    private Set<Lesson> lessons;
 
-    public Student removeFromLessons(){
-        lessons.forEach(l->l.getStudents().remove(this));
-        this.lessons.clear();
-        return this;
-    }
 }

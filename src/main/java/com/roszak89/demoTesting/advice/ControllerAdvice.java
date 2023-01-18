@@ -1,7 +1,6 @@
 package com.roszak89.demoTesting.advice;
 
 
-import com.roszak89.demoTesting.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
