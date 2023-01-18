@@ -16,7 +16,7 @@ public class Lesson {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "class_id", nullable = false)
+    @Column(name = "lesson_id", nullable = false)
     private Long id;
 
     private String name;
@@ -25,8 +25,23 @@ public class Lesson {
     @JoinColumn(name = "teacher_id")
     private Teacher mainTeacher;
 
-    @ManyToMany(mappedBy = "lessons")
+    @ManyToMany( mappedBy = "lessons")
     private Set<Student> students;
+
+
+    public Lesson removeFromStudents(){
+        students.forEach(s->s.getLessons().remove(this));
+        students.clear();
+        return this;
+    }
+
+    public Lesson removeTeacher(){
+        mainTeacher.getLessons().remove(this);
+        this.setMainTeacher(null);
+        return this;
+    }
+
+
 
 
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,9 +18,18 @@ public class Teacher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "teacher_id", nullable = false)
     private Long id;
-
     private long pay;
     private String name;
+    @OneToMany
+    private Set<Lesson> lessons;
+
+    public Teacher removeFromLessons(){
+        this.getLessons().forEach(l->l.setMainTeacher(null));
+        this.getLessons().clear();
+        return this;
+    }
+
+
 
 
 }
