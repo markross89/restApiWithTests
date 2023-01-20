@@ -11,7 +11,6 @@ import java.util.Set;
 @Setter
 @Entity
 @NoArgsConstructor
-
 public class Lesson {
 
     @Id

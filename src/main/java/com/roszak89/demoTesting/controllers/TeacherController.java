@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/teacher")
 public class TeacherController {
 
     private final TeacherRepository teacherRepository;
@@ -20,31 +21,31 @@ public class TeacherController {
         this.teacherRepository = teacherRepository;
     }
 
-    @GetMapping("/teachers")
+    @GetMapping
     public List<Teacher> getTeachers() {
         return teacherRepository.findAll();
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/teachers")
-    public void createTeacher(@Valid @RequestBody Teacher teacher){
-        teacherRepository.save(teacher);
-    }
-
-    @GetMapping("teacher/{id}")
+    @GetMapping(value="{id}")
     public Teacher getTeacher(@PathVariable long id) {
         return teacherRepository.findById(id).orElseThrow(()-> new NotFoundException("Teacher not found!", id));
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/teacher/{id}")
-    public void updateTeacher(@Valid @RequestBody Teacher teacher, @PathVariable long id){
-        teacher.setId(teacherRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Teacher not found!")).getId());
+
+    @PostMapping
+    public void createTeacher(@Valid @RequestBody Teacher teacher){
         teacherRepository.save(teacher);
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/teacher/{id}")
+    @PutMapping(value="{id}")
+    public void updateTeacher(@Valid @RequestBody Teacher teacher, @PathVariable long id){
+        teacher.setId(teacherRepository.findById(id).orElseThrow(() -> new NotFoundException("Teacher not found!",id)).getId());
+        teacherRepository.save(teacher);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping(value="{id}")
     public void deleteTeacher(@PathVariable long id){
         teacherRepository.delete(teacherRepository.findById(id).orElseThrow(()->new NotFoundException("Teacher not found!", id)));
     }
