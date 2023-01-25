@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@WithMockUser("spring")
 class TeacherControllerIntegrationTest {
 
     @Autowired
@@ -56,8 +57,6 @@ class TeacherControllerIntegrationTest {
         teacherRepository.deleteAll();
     }
 
-
-    @WithMockUser("spring")
     @Test
     void getTeachers() throws Exception {
         mockMvc.perform(get("/teacher")
@@ -69,7 +68,6 @@ class TeacherControllerIntegrationTest {
         ;
     }
 
-    @WithMockUser("spring")
     @Test
     void getTeacher_success() throws Exception {
         mockMvc.perform(get("/teacher/{id}", teacher1.getId())
@@ -80,7 +78,7 @@ class TeacherControllerIntegrationTest {
         ;
     }
 
-    @WithMockUser("spring")
+
     @Test
     void getTeacher_noId() throws Exception {
         mockMvc.perform(get("/teacher/{id}", -1)
@@ -91,7 +89,6 @@ class TeacherControllerIntegrationTest {
                 .andDo(print());
     }
 
-    @WithMockUser("spring")
     @Test
     void createTeacher() throws Exception {
         mockMvc.perform(post("/teacher")
@@ -112,7 +109,6 @@ class TeacherControllerIntegrationTest {
 //                .andDo(print());
     }
 
-    @WithMockUser("spring")
     @Test
     void updateTeacher_success() throws Exception {
         mockMvc.perform(put("/teacher/{id}", teacher1.getId())
@@ -123,7 +119,6 @@ class TeacherControllerIntegrationTest {
                 .andDo(print());
     }
 
-    @WithMockUser("spring")
     @Test
     void updateTeacher_noId() throws Exception {
         mockMvc.perform(put("/teacher/{id}", -1)
@@ -134,7 +129,6 @@ class TeacherControllerIntegrationTest {
                 .andDo(print());
     }
 
-    @WithMockUser("spring")
     @Test
     void deleteTeacher_success() throws Exception {
         mockMvc.perform(delete("/teacher/{id}", teacher1.getId())

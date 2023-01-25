@@ -14,6 +14,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping("/student")
 public class StudentsController {
 
     private final StudentRepository studentRepository;
@@ -23,31 +24,32 @@ public class StudentsController {
     }
 
 
-    @GetMapping("/students")
+    @GetMapping
     public List<Student> students() {
         return studentRepository.findAll();
     }
 
-    @GetMapping("/student/{id}")
+    @GetMapping("{id}")
     public Student getStudent(@PathVariable long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Student not found!"));
+        return studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not found!", id));
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/students")
-    public void addStudent(@Valid @RequestBody Student student) {
+    @PostMapping
+    public Student addStudent(@Valid @RequestBody Student student) {
         studentRepository.save(student);
+        return student;
+    }
+
+    @PutMapping("{id}")
+    public Student updateStudent(@Valid @RequestBody Student student, @PathVariable long id) {
+        student.setId(studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not found!", id)).getId());
+        studentRepository.save(student);
+        return student;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/student/{id}")
-    public void updateStudent(@Valid @RequestBody Student student, @PathVariable long id) {
-        student.setId(studentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Student not found!")).getId());
-        studentRepository.save(student);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/student/{id}")
+    @DeleteMapping("{id}")
     public void deleteStudent(@PathVariable long id) {
         studentRepository.delete(studentRepository.findById(id).orElseThrow(() -> new NotFoundException("Student not found!", id)));
     }

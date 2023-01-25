@@ -28,7 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(TeacherController.class)
-class TeacherControllerTest {
+@WithMockUser("spring")
+class TeacherControllerUnitTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -44,7 +45,6 @@ class TeacherControllerTest {
     Teacher teacher3 = Teacher.builder().id(3L).pay(2300).name("kamil").build();
     Teacher newTeacher = Teacher.builder().id(2L).pay(2900).name("baba").build();
 
-    @WithMockUser("spring")
     @Test
     void getTeachers() throws Exception {
         List<Teacher> teachers = new ArrayList<>(Arrays.asList(teacher1, teacher2, teacher3));
@@ -58,7 +58,6 @@ class TeacherControllerTest {
                 .andExpect(jsonPath("$[2].name", is(teacher3.getName())));
     }
 
-    @WithMockUser("spring")
     @Test
     void getTeacher_success() throws Exception {
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.ofNullable(teacher1));
@@ -71,7 +70,6 @@ class TeacherControllerTest {
                 .andExpect(jsonPath("$.name", is(teacher1.getName())));
     }
 
-    @WithMockUser("spring")
     @Test
     void getTeacher_noId() throws Exception {
         Mockito.when(teacherRepository.findById(1L)).thenReturn(Optional.empty());
@@ -84,7 +82,6 @@ class TeacherControllerTest {
                         assertEquals("Teacher not found! id: 1", Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 
-    @WithMockUser("spring")
     @Test
     void createTeacher() throws Exception {
         Mockito.when(teacherRepository.save(teacher2)).thenReturn(teacher2);
@@ -98,7 +95,6 @@ class TeacherControllerTest {
                 .andExpect(jsonPath("$.name", is(teacher2.getName())));
     }
 
-    @WithMockUser("spring")
     @Test
     void updateTeacher_success() throws Exception {
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.ofNullable(teacher1));
@@ -113,7 +109,6 @@ class TeacherControllerTest {
                 .andExpect(jsonPath("$.name", is(newTeacher.getName())));
     }
 
-    @WithMockUser("spring")
     @Test
     void updateTeacher_noId() throws Exception {
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.empty());
@@ -127,7 +122,6 @@ class TeacherControllerTest {
                 .andExpect(result -> assertEquals("Teacher not found! id: " + teacher1.getId(), Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 
-    @WithMockUser("spring")
     @Test
     void deleteTeacher_success() throws Exception {
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.ofNullable(teacher1));
@@ -139,7 +133,6 @@ class TeacherControllerTest {
                 .andExpect(status().isNoContent());
     }
 
-    @WithMockUser("spring")
     @Test
     void deleteTeacher_noTeacher() throws Exception {
         Mockito.when(teacherRepository.findById(23L)).thenReturn(Optional.empty());
