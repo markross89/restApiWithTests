@@ -39,28 +39,14 @@ class TeacherControllerTest {
     @MockBean
     TeacherRepository teacherRepository;
 
-    Teacher teacher1 = Teacher.builder()
-            .id(1L)
-            .pay(2100)
-            .name("marek")
-            .build();
-
-    Teacher teacher2 = Teacher.builder()
-            .id(2L)
-            .pay(2200)
-            .name("bogdan")
-            .build();
-
-    Teacher teacher3 = Teacher.builder()
-            .id(3L)
-            .pay(2300)
-            .name("kamil")
-            .build();
+    Teacher teacher1 = Teacher.builder().id(1L).pay(2100).name("marek").build();
+    Teacher teacher2 = Teacher.builder().id(2L).pay(2200).name("bogdan").build();
+    Teacher teacher3 = Teacher.builder().id(3L).pay(2300).name("kamil").build();
+    Teacher newTeacher = Teacher.builder().id(2L).pay(2900).name("baba").build();
 
     @WithMockUser("spring")
     @Test
     void getTeachers() throws Exception {
-
         List<Teacher> teachers = new ArrayList<>(Arrays.asList(teacher1, teacher2, teacher3));
         Mockito.when(teacherRepository.findAll()).thenReturn(teachers);
 
@@ -75,7 +61,6 @@ class TeacherControllerTest {
     @WithMockUser("spring")
     @Test
     void getTeacher_success() throws Exception {
-
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.ofNullable(teacher1));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -89,7 +74,6 @@ class TeacherControllerTest {
     @WithMockUser("spring")
     @Test
     void getTeacher_noId() throws Exception {
-
         Mockito.when(teacherRepository.findById(1L)).thenReturn(Optional.empty());
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -117,12 +101,6 @@ class TeacherControllerTest {
     @WithMockUser("spring")
     @Test
     void updateTeacher_success() throws Exception {
-        Teacher newTeacher = Teacher.builder()
-                .id(2L)
-                .pay(2900)
-                .name("baba")
-                .build();
-
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.ofNullable(teacher1));
         Mockito.when(teacherRepository.save(newTeacher)).thenReturn(newTeacher);
 
@@ -138,12 +116,6 @@ class TeacherControllerTest {
     @WithMockUser("spring")
     @Test
     void updateTeacher_noId() throws Exception {
-        Teacher newTeacher = Teacher.builder()
-                .id(2L)
-                .pay(2900)
-                .name("baba")
-                .build();
-
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.empty());
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -155,11 +127,9 @@ class TeacherControllerTest {
                 .andExpect(result -> assertEquals("Teacher not found! id: " + teacher1.getId(), Objects.requireNonNull(result.getResolvedException()).getMessage()));
     }
 
-
     @WithMockUser("spring")
     @Test
     void deleteTeacher_success() throws Exception {
-
         Mockito.when(teacherRepository.findById(teacher1.getId())).thenReturn(Optional.ofNullable(teacher1));
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -172,7 +142,6 @@ class TeacherControllerTest {
     @WithMockUser("spring")
     @Test
     void deleteTeacher_noTeacher() throws Exception {
-
         Mockito.when(teacherRepository.findById(23L)).thenReturn(Optional.empty());
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -182,7 +151,5 @@ class TeacherControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(result ->
                         assertEquals("Teacher not found! id: 23", Objects.requireNonNull(result.getResolvedException()).getMessage()));
-
-
     }
 }

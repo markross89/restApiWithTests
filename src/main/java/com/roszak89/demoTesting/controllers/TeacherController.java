@@ -17,7 +17,6 @@ public class TeacherController {
 
     private final TeacherRepository teacherRepository;
 
-
     public TeacherController(TeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
     }
