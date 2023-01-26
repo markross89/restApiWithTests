@@ -1,7 +1,7 @@
-package com.roszak89.demoTesting.controllers;
+package com.roszak89.demoTesting.controllers.UnitTests;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.roszak89.demoTesting.controllers.StudentsController;
 import com.roszak89.demoTesting.models.Student;
 import com.roszak89.demoTesting.repositories.StudentRepository;
 import org.junit.jupiter.api.Test;
@@ -101,7 +101,8 @@ class StudentsControllerUnitTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(newStudent)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is(newStudent.getName())));
+                .andExpect(jsonPath("$.name", is(newStudent.getName())))
+                .andDo(print());
     }
 
     @Test
@@ -113,7 +114,8 @@ class StudentsControllerUnitTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(newStudent)))
                 .andExpect(status().isNotFound())
-                .andExpect(result -> assertEquals("Student not found! id: -1", Objects.requireNonNull(result.getResolvedException()).getMessage()));
+                .andExpect(result -> assertEquals("Student not found! id: -1", Objects.requireNonNull(result.getResolvedException()).getMessage()))
+                .andDo(print());
     }
 
     @Test

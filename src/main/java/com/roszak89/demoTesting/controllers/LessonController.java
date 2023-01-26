@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
+@RequestMapping("/lesson")
 public class LessonController {
 
     private final LessonRepository lessonRepository;
@@ -20,33 +22,34 @@ public class LessonController {
         this.lessonRepository = lessonRepository;
     }
 
-    @GetMapping("/lessons")
+    @GetMapping
     public List<Lesson> getLessons() {
         return lessonRepository.findAll();
     }
 
+    @GetMapping("{id}")
+    public Lesson getLesson(@PathVariable long id) {
+        return lessonRepository.findById(id).orElseThrow(() -> new NotFoundException("Lesson not found!", id));
+    }
+
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/lessons")
-    public void createLesson(@Valid @RequestBody Lesson lesson) {
+    @PostMapping
+    public Lesson createLesson(@Valid @RequestBody Lesson lesson) {
         lessonRepository.save(lesson);
+        return lesson;
     }
 
 
-    @GetMapping("/lesson/{id}")
-    public Lesson getStudent(@PathVariable long id){
-        return lessonRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Lesson not found!"));
+    @PutMapping("{id}")
+    public Lesson updateLesson(@Valid @RequestBody Lesson lesson, @PathVariable long id) {
+        lesson.setId(lessonRepository.findById(id).orElseThrow(() -> new NotFoundException("Lesson not found!", id)).getId());
+        lessonRepository.save(lesson);
+        return lesson;
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/lesson/{id}")
-    public void updateLesson(@Valid @RequestBody Lesson lesson, @PathVariable long id){
-        lesson.setId(lessonRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("Lesson not found!")).getId());
-        lessonRepository.save(lesson);
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/lesson/{id}")
-    public void deleteLesson(@PathVariable long id){
-        lessonRepository.delete(lessonRepository.findById(id).orElseThrow(()->new NotFoundException("Lesson not found!", id)));
+    @DeleteMapping("{id}")
+    public void deleteLesson(@PathVariable long id) {
+        lessonRepository.delete(lessonRepository.findById(id).orElseThrow(() -> new NotFoundException("Lesson not found!", id)));
     }
 }

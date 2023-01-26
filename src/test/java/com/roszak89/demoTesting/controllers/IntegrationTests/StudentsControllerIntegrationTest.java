@@ -1,4 +1,4 @@
-package com.roszak89.demoTesting.controllers;
+package com.roszak89.demoTesting.controllers.IntegrationTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.roszak89.demoTesting.models.Student;
@@ -47,13 +47,13 @@ class StudentsControllerIntegrationTest {
     Student newStudent = Student.builder().name("brajan").surname("bobski").email("ccccc").build();
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         List<Student> students = new ArrayList<>(Arrays.asList(student1, student2));
         studentRepository.saveAll(students);
     }
 
     @AfterEach
-    void drop() {
+    void tearDown() {
         studentRepository.deleteAll();
     }
 
@@ -92,6 +92,7 @@ class StudentsControllerIntegrationTest {
                 .content(mapper.writeValueAsString(newStudent)));
 
         response
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is(newStudent.getName())));
     }
@@ -101,6 +102,7 @@ class StudentsControllerIntegrationTest {
         mockMvc.perform(put("/student/{id}", student1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(newStudent)))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(newStudent.getName())));
     }
@@ -110,6 +112,7 @@ class StudentsControllerIntegrationTest {
         mockMvc.perform(put("/student/{id}", -1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(newStudent)))
+                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(result ->
                         assertEquals("Student not found! id: -1", Objects.requireNonNull(result.getResolvedException()).getMessage()));

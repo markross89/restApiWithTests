@@ -1,4 +1,4 @@
-package com.roszak89.demoTesting.controllers;
+package com.roszak89.demoTesting.controllers.IntegrationTests;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,7 +65,6 @@ class TeacherControllerIntegrationTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is("marek")))
                 .andDo(print());
-        ;
     }
 
     @Test
@@ -75,9 +74,7 @@ class TeacherControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", is(teacher1.getName())))
                 .andDo(print());
-        ;
     }
-
 
     @Test
     void getTeacher_noId() throws Exception {
@@ -97,16 +94,6 @@ class TeacherControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name", is(newTeacher.getName())))
                 .andDo(print());
-
-//      * more readable could be version with split request and response *
-
-//        ResultActions response = mockMvc.perform(post("/teacher")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(newTeacher)));
-//
-//        response.andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.name", is(newTeacher.getName())))
-//                .andDo(print());
     }
 
     @Test
